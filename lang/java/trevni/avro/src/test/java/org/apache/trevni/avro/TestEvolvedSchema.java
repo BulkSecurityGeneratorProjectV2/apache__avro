@@ -19,6 +19,7 @@ package org.apache.trevni.avro;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
@@ -76,7 +77,7 @@ public class TestEvolvedSchema {
   public void testTrevniEvolvedRead() throws IOException {
     AvroColumnWriter<GenericRecord> acw = new AvroColumnWriter<>(writer, new ColumnFileMetaData());
     acw.write(writtenRecord);
-    File serializedTrevni = File.createTempFile("trevni", null);
+    File serializedTrevni = Files.createTempFile("trevni", null).toFile();
     acw.writeTo(serializedTrevni);
 
     AvroColumnReader.Params params = new Params(serializedTrevni);
@@ -90,7 +91,7 @@ public class TestEvolvedSchema {
 
   @Test
   public void testAvroEvolvedRead() throws IOException {
-    File serializedAvro = File.createTempFile("avro", null);
+    File serializedAvro = Files.createTempFile("avro", null).toFile();
     DatumWriter<GenericRecord> dw = new GenericDatumWriter<>(writer);
     DataFileWriter<GenericRecord> dfw = new DataFileWriter<>(dw);
     dfw.create(writer, serializedAvro);
